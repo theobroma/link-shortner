@@ -24,6 +24,7 @@ const MainView: React.FC = () => {
   return (
     <Container maxWidth="lg">
       <Box sx={{ flexGrow: 1 }}>
+        <h1 className="text-3xl font-bold underline">Hello world!</h1>
         <Grid container spacing={2}>
           {coins.length > 0 &&
             coins.map((coin: ICurrency, idx: number) => (

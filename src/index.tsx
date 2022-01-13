@@ -6,6 +6,7 @@ import { store } from './@store/configureStore';
 import AppThemeProvider from './@themes/theme';
 import { AppContainer } from './@routes/AppContainer';
 import './index.css';
+import './tailwind.css';
 import * as serviceWorker from './serviceWorker';
 
 // Open Source fonts

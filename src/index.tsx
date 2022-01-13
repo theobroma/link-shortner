@@ -3,7 +3,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { store } from './@store/configureStore';
-import AppThemeProvider from './@themes/theme';
 import { AppContainer } from './@routes/AppContainer';
 import './index.css';
 import './tailwind.css';
@@ -18,9 +17,7 @@ import '@fontsource/roboto/700.css';
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
-      <AppThemeProvider>
-        <AppContainer />
-      </AppThemeProvider>
+      <AppContainer />
     </Provider>
   </React.StrictMode>,
   document.getElementById('root'),

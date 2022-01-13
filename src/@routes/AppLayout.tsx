@@ -1,18 +1,17 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
-import PersistentDrawerLeft from '../@components/AppBar/Drawer';
-import Footer from '../@components/Footer';
 // import ComponentWithProblem from '../@components/WDYR/ComponentWithProblem';
 
 const AppLayout = () => {
   return (
     <div className="HolyGrail">
-      <PersistentDrawerLeft>
+      {/* <PersistentDrawerLeft>
         <Outlet />
-      </PersistentDrawerLeft>
+      </PersistentDrawerLeft> */}
+      <Outlet />
       {/* Test WDYR */}
       {/* <ComponentWithProblem /> */}
-      <Footer />
+      {/* <Footer /> */}
     </div>
   );
 };

@@ -1,33 +1,40 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { LinkAPI } from '../../@api/api';
-import { LinkResponseSchema, LinkResponseType } from '../../@types';
+import {
+  LinkResponseSchema,
+  LinkResponseType,
+  LinkResultType,
+} from '../../@types';
 import { waitForMe } from '../../@utils/waitforme';
 
-export const createShortLinkTC = createAsyncThunk<
-  LinkResponseType,
-  string,
-  any
->('links/createShortLink', async (url, thunkAPI) => {
-  try {
-    await waitForMe(300);
-    const res = await LinkAPI.getShortLink(url);
-
-    // ZOD validation
+export const createShortLinkTC = createAsyncThunk<LinkResponseType, string>(
+  'links/createShortLink',
+  async (url, thunkAPI) => {
     try {
-      LinkResponseSchema.parse(res.data);
-    } catch (error) {
-      console.log(error);
-    }
+      await waitForMe(300);
+      const res = await LinkAPI.getShortLink(url);
 
-    return res.data;
-  } catch (err: any) {
-    return thunkAPI.rejectWithValue(err.response.data);
-  }
-});
+      // ZOD validation
+      try {
+        LinkResponseSchema.parse(res.data);
+      } catch (error) {
+        console.log(error);
+      }
+
+      return res.data;
+    } catch (err: any) {
+      return thunkAPI.rejectWithValue(err.response.data);
+    }
+  },
+);
 
 const linkInitialState = {
-  items: [] as any,
-  loading: 'idle' as string,
+  items: [] as LinkResultType[],
+  // utils
+  isFetching: false,
+  isSuccess: false,
+  isError: false,
+  errorMessage: '',
 };
 
 export type linkInitialStateType = typeof linkInitialState;
@@ -36,25 +43,30 @@ export const linkSlice = createSlice({
   name: 'links',
   initialState: linkInitialState,
   reducers: {},
-  extraReducers: {
-    // [createShortLink.rejected]: (state) => {
-    //   state.loading = 'rejected';
-    // },
-    // [createShortLink.pending]: (state) => {
-    //   state.loading = 'loading';
-    // },
-    // [createShortLink.fulfilled]: (state, action) => {
-    //   const { ok, result } = action.payload;
-    //   if (ok) {
-    //     state.items.push(result);
-    //     state.loading = 'idle';
-    //   } else {
-    //     state.loading = 'error';
-    //   }
-    // },
+  extraReducers: (builder) => {
+    builder.addCase(createShortLinkTC.pending, (state) => {
+      state.isFetching = true;
+      //   clear data
+      state.isSuccess = false;
+      state.isError = false;
+      state.errorMessage = '';
+    });
+    builder.addCase(createShortLinkTC.fulfilled, (state, action) => {
+      const { ok, result } = action.payload;
+      if (ok) {
+        state.items.push(result);
+        state.isSuccess = true;
+      } else {
+        state.isError = true;
+      }
+      state.isFetching = false;
+    });
+    builder.addCase(createShortLinkTC.rejected, (state, action) => {
+      state.isFetching = false;
+      state.isError = true;
+      if (action.payload instanceof Error) {
+        state.errorMessage = action.payload.message;
+      }
+    });
   },
 });
-
-// export const selectLoading = (state) => state.links.loading;
-// export const selectLinks = (state) => state.links.items;
-// export default linkSlice.reducer;

@@ -13,6 +13,8 @@ export const LinkResultSchema = z.object({
   original_link: z.string(),
 });
 
+export type LinkResultType = z.infer<typeof LinkResultSchema>;
+
 export const LinkResponseSchema = z.object({
   ok: z.boolean(),
   result: LinkResultSchema,

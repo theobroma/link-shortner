@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-
-const API_BASE_URL = 'https://api.shrtco.de/v2/shorten?url=';
+import { LinkAPI } from '../../@api/api';
+import { waitForMe } from '../../@utils/waitforme';
 
 // export const createShortLink = createAsyncThunk(
 //   'links/createShortLink',
@@ -9,6 +9,20 @@ const API_BASE_URL = 'https://api.shrtco.de/v2/shorten?url=';
 //     return await response.json();
 //   },
 // );
+
+export const createShortLinkTC = createAsyncThunk<any, string, any>(
+  'links/createShortLink',
+  async (url, thunkAPI) => {
+    try {
+      await waitForMe(300);
+      const res = await LinkAPI.getShortLink(url);
+      console.log(res.data);
+      return res.data;
+    } catch (err: any) {
+      return thunkAPI.rejectWithValue(err.response.data);
+    }
+  },
+);
 
 const linkInitialState = {
   items: [] as any,

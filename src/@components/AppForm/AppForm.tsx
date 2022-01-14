@@ -1,6 +1,8 @@
+import { url } from 'inspector';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
+import { createShortLinkTC } from '../../@store/link/linkSlice';
 // import { Button } from 'components/Button';
 // import { createShortLink, selectLoading } from 'store/slice/linkSlice';
 
@@ -21,6 +23,7 @@ const AppForm = () => {
   const onSubmit = ({ Url }: any) => {
     console.log(Url);
     // dispatch(createShortLink(Url));
+    dispatch(createShortLinkTC(Url));
     reset();
   };
 

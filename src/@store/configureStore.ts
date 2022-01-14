@@ -4,6 +4,7 @@ import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 import { createLogger } from 'redux-logger';
 import { cryptoApi } from './coins/crypto/cryptoApi';
 import { coinsReducer, coinsSlice } from './coins/slice';
+import { linkSlice } from './link/linkSlice';
 import { uiReducer, uiSlice } from './ui/slice';
 // import { RESET_STATE_ACTION_TYPE } from './actions/resetState';
 
@@ -12,8 +13,7 @@ const logger = createLogger({
 });
 
 const reducers = {
-  //   [modalSlice.name]: modalReducer,
-  //   [pokemonApi.reducerPath]: pokemonApi.reducer,
+  [linkSlice.name]: linkSlice.reducer,
   [coinsSlice.name]: coinsReducer,
   [cryptoApi.reducerPath]: cryptoApi.reducer,
   [uiSlice.name]: uiReducer,

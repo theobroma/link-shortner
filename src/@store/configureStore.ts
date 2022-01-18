@@ -1,5 +1,16 @@
 // example - https://github.com/theobroma/rtk-query-toptal-example/blob/41ea72e4ad62ff6ec4a1e2a8f84b17301f7577e0/src/shared/redux/store.ts
 import { combineReducers, configureStore, Reducer } from '@reduxjs/toolkit';
+import {
+  persistStore,
+  persistReducer,
+  FLUSH,
+  REHYDRATE,
+  PAUSE,
+  PERSIST,
+  PURGE,
+  REGISTER,
+} from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 import { createLogger } from 'redux-logger';
 import { cryptoApi } from './coins/crypto/cryptoApi';
@@ -11,6 +22,13 @@ import { uiReducer, uiSlice } from './ui/slice';
 const logger = createLogger({
   collapsed: true,
 });
+
+const persistConfig = {
+  key: 'root',
+  storage,
+  // blacklist: ['filter'], // will not be persisted
+  whitelist: ['links'], // will be persisted
+};
 
 const reducers = {
   [linkSlice.name]: linkSlice.reducer,
@@ -29,14 +47,25 @@ export const rootReducer: Reducer<RootState> = (state, action) => {
   return combinedReducer(state, action);
 };
 
+// Middleware: Redux Persist Persisted Reducer
+const persistedReducer = persistReducer(persistConfig, rootReducer);
+
 export const store = configureStore({
-  reducer: rootReducer,
+  reducer: persistedReducer,
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat([logger, cryptoApi.middleware]),
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+      },
+    }).concat(logger),
   // devTools: process.env.NODE_ENV === 'development',
   devTools: true,
 });
 
+export const persistor = persistStore(store);
+export default { store, persistor };
+
+// ==================== TYPES ====================
 export type AppDispatch = typeof store.dispatch;
 export type RootState = ReturnType<typeof combinedReducer>;
 

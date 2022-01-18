@@ -2,7 +2,8 @@ import './wdyr'; // <--- first import
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import { store } from './@store/configureStore';
+import { PersistGate } from 'redux-persist/integration/react';
+import { persistor, store } from './@store/configureStore';
 import { AppContainer } from './@routes/AppContainer';
 import './index.css';
 import './tailwind.css';
@@ -17,7 +18,9 @@ import '@fontsource/roboto/700.css';
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
-      <AppContainer />
+      <PersistGate loading={<div>loading...</div>} persistor={persistor}>
+        <AppContainer />
+      </PersistGate>
     </Provider>
   </React.StrictMode>,
   document.getElementById('root'),

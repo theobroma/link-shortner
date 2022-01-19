@@ -1,12 +1,18 @@
-import React from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
+import React, { useState } from 'react';
 import { useAppSelector } from '../../@store/configureStore';
 import { linksSelector } from '../../@store/link/selectors';
-import { LinkResultType } from '../../@types';
 import classes from './Shortens.module.scss';
 
 const Shortens = () => {
+  const [copiedLinks, setCopiedLink] = useState<string | null>(null);
   const links = useAppSelector(linksSelector).items;
-  //   const links = [] as LinkResultType[];
+
+  const copyToClipboard = (link: string) => {
+    navigator.clipboard.writeText(link).then(() => {
+      setCopiedLink(link);
+    });
+  };
 
   if (!links.length) return null;
 
@@ -14,17 +20,24 @@ const Shortens = () => {
     <section className={classes.Shortens}>
       <div className="container">
         {links.map((item) => (
-          <div key={item.code} className={classes.item}>
-            <span>{item.original_link}</span>
-            <span>{item.full_short_link2}</span>
-            <button
-              type="submit"
-              className="inline-block bg-yellow-500 text-yellow-800 rounded shadow py-2 px-5 text-sm"
+          <AnimatePresence key={item.code}>
+            <motion.div
+              className={classes.item}
+              data-active={copiedLinks === item.full_short_link2}
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
             >
-              Copy
-            </button>
-            {/* <Button variant="square">Copy</Button> */}
-          </div>
+              <span>{item.original_link}</span>
+              <span>{item.full_short_link2}</span>
+              <button
+                type="submit"
+                className="inline-block bg-yellow-500 text-yellow-800 rounded shadow py-2 px-5 text-sm"
+                onClick={() => copyToClipboard(item.full_short_link2)}
+              >
+                {copiedLinks === item.full_short_link2 ? 'Copied!' : 'Copy'}
+              </button>
+            </motion.div>
+          </AnimatePresence>
         ))}
       </div>
     </section>

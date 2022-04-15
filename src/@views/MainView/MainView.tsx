@@ -1,7 +1,7 @@
 import React from 'react';
 import { AppForm } from '../../@components/AppForm';
 // import BasicExample from '../../@components/BasicExample';
-import JobForm from '../../@components/JobForm';
+// import JobForm from '../../@components/JobForm';
 import { Shortens } from '../../@components/Shortens';
 
 const MainView: React.FC = () => {

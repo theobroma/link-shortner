@@ -1,25 +1,29 @@
 import React from 'react';
-import { useForm } from 'react-hook-form';
-import { useDispatch, useSelector } from 'react-redux';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { useAppDispatch } from '../../@store/configureStore';
 import { createShortLinkTC } from '../../@store/link/linkSlice';
 // import { Button } from 'components/Button';
 // import { createShortLink, selectLoading } from 'store/slice/linkSlice';
 
 import classes from './AppForm.module.scss';
 
+type Inputs = {
+  Url: string;
+};
+
 const AppForm = () => {
   // const loading = useSelector(selectLoading);
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const {
     register,
     formState: { errors },
     handleSubmit,
     reset,
-  } = useForm({
+  } = useForm<Inputs>({
     mode: 'onSubmit',
   });
 
-  const onSubmit = ({ Url }: any) => {
+  const onSubmit: SubmitHandler<Inputs> = ({ Url }) => {
     dispatch(createShortLinkTC(Url));
     reset();
   };

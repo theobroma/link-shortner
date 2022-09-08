@@ -1,18 +1,22 @@
 // example - https://github.com/theobroma/rtk-query-toptal-example/blob/41ea72e4ad62ff6ec4a1e2a8f84b17301f7577e0/src/shared/redux/store.ts
-import { combineReducers, configureStore, Reducer } from '@reduxjs/toolkit';
+import type { TypedUseSelectorHook } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { createLogger } from 'redux-logger';
 import {
-  persistStore,
-  persistReducer,
   FLUSH,
-  REHYDRATE,
   PAUSE,
   PERSIST,
+  persistReducer,
+  persistStore,
   PURGE,
   REGISTER,
+  REHYDRATE,
 } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
-import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
-import { createLogger } from 'redux-logger';
+
+import type { Reducer } from '@reduxjs/toolkit';
+import { combineReducers, configureStore } from '@reduxjs/toolkit';
+
 import { linkSlice } from './link/linkSlice';
 // import { RESET_STATE_ACTION_TYPE } from './actions/resetState';
 

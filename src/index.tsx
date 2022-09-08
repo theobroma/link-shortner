@@ -1,13 +1,14 @@
 import React from 'react';
-import { Provider } from 'react-redux';
 import { createRoot } from 'react-dom/client';
+import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
-import { persistor, store } from './@store/configureStore';
+
 import { AppContainer } from './@routes/AppContainer';
-import './index.css';
-import './tailwind.css';
+import { persistor, store } from './@store/configureStore';
 import * as serviceWorker from './serviceWorker';
 
+import './index.css';
+import './tailwind.css';
 // Open Source fonts
 import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';

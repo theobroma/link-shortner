@@ -1,6 +1,7 @@
 // https://stackoverflow.com/questions/54496398/typescript-type-string-undefined-is-not-assignable-to-type-string
 import axios from 'axios';
-import { LinkResponseType } from '../@types';
+
+import type { LinkResponseType } from '../@types';
 
 const API_URL = 'https://api.shrtco.de/v2';
 

@@ -1,10 +1,8 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+
 import { LinkAPI } from '../../@api/api';
-import {
-  LinkResponseSchema,
-  LinkResponseType,
-  LinkResultType,
-} from '../../@types';
+import type { LinkResponseType, LinkResultType } from '../../@types';
+import { LinkResponseSchema } from '../../@types';
 import { waitForMe } from '../../@utils/waitforme';
 
 export const createShortLinkTC = createAsyncThunk<LinkResponseType, string>(

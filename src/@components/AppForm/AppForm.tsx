@@ -1,10 +1,12 @@
 import React from 'react';
-import { SubmitHandler, useForm } from 'react-hook-form';
+import type { SubmitHandler } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
+
 import { useAppDispatch } from '../../@store/configureStore';
 import { createShortLinkTC } from '../../@store/link/linkSlice';
+
 // import { Button } from 'components/Button';
 // import { createShortLink, selectLoading } from 'store/slice/linkSlice';
-
 import classes from './AppForm.module.scss';
 
 type Inputs = {
@@ -58,7 +60,7 @@ const AppForm = () => {
           />
           <button
             type="submit"
-            className="inline-block bg-yellow-500 text-yellow-800 rounded shadow py-2 px-5 text-sm"
+            className="inline-block rounded bg-yellow-500 py-2 px-5 text-sm text-yellow-800 shadow"
           >
             Shorten it!
           </button>
@@ -70,7 +72,7 @@ const AppForm = () => {
           >
             Shorten it!
           </Button> */}
-          {errors.Url && (
+          {!!errors.Url && (
             <div className={classes.error}>{errors.Url.message}</div>
           )}
         </form>

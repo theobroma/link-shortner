@@ -8,7 +8,14 @@ import classes from './Shortens.module.scss';
 
 const Shortens = () => {
   const [copiedLinks, setCopiedLink] = useState<string | null>(null);
-  const links = useAppSelector(linksSelector).items;
+  const {
+    items: links,
+    error,
+    isError,
+    // isFetching,
+    isLoading,
+    isSuccess,
+  } = useAppSelector(linksSelector);
 
   const copyToClipboard = (link: string) => {
     navigator.clipboard.writeText(link).then(() => {
@@ -17,6 +24,7 @@ const Shortens = () => {
   };
 
   if (!links.length) return null;
+  if (isLoading) return <div>Processing...</div>;
 
   return (
     <section className={classes.Shortens}>

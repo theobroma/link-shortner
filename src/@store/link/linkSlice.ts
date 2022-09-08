@@ -9,7 +9,7 @@ export const createShortLinkTC = createAsyncThunk<LinkResponseType, string>(
   'links/createShortLink',
   async (url, thunkAPI) => {
     try {
-      await waitForMe(300);
+      await waitForMe(3000);
       const res = await LinkAPI.getShortLink(url);
 
       // ZOD validation
@@ -29,10 +29,10 @@ export const createShortLinkTC = createAsyncThunk<LinkResponseType, string>(
 const linkInitialState = {
   items: [] as LinkResultType[],
   // utils
-  isFetching: false,
+  isLoading: false,
   isSuccess: false,
   isError: false,
-  errorMessage: '',
+  error: '' as string | null,
 };
 
 export type linkInitialStateType = typeof linkInitialState;
@@ -42,29 +42,30 @@ export const linkSlice = createSlice({
   initialState: linkInitialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(createShortLinkTC.pending, (state) => {
-      state.isFetching = true;
-      //   clear data
-      state.isSuccess = false;
-      state.isError = false;
-      state.errorMessage = '';
-    });
-    builder.addCase(createShortLinkTC.fulfilled, (state, action) => {
-      const { ok, result } = action.payload;
-      if (ok) {
-        state.items.push(result);
-        state.isSuccess = true;
-      } else {
+    builder
+      .addCase(createShortLinkTC.pending, (state) => {
+        state.isLoading = true;
+        //   clear data
+        state.isSuccess = false;
+        state.isError = false;
+        state.error = '';
+      })
+      .addCase(createShortLinkTC.fulfilled, (state, action) => {
+        const { ok, result } = action.payload;
+        if (ok) {
+          state.items.push(result);
+          state.isSuccess = true;
+        } else {
+          state.isError = true;
+        }
+        state.isLoading = false;
+      })
+      .addCase(createShortLinkTC.rejected, (state, action) => {
+        state.isLoading = false;
         state.isError = true;
-      }
-      state.isFetching = false;
-    });
-    builder.addCase(createShortLinkTC.rejected, (state, action) => {
-      state.isFetching = false;
-      state.isError = true;
-      if (action.payload instanceof Error) {
-        state.errorMessage = action.payload.message;
-      }
-    });
+        if (action.payload instanceof Error) {
+          state.error = action.payload.message;
+        }
+      });
   },
 });

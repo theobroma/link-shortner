@@ -6,7 +6,6 @@ import { Shortens } from '../../@components/Shortens';
 const MainView = () => {
   return (
     <div>
-      {/* <h1 className="text-3xl font-bold underline">Hello world!</h1> */}
       <div className="min-h-screen bg-purple-700 py-20 px-10">
         {/* <BasicExample /> */}
         {/* <JobForm /> */}

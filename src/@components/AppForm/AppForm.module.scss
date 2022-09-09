@@ -50,10 +50,8 @@
 }
 
 .error {
+  @apply mt-1 ml-1 flex items-center text-xs font-medium tracking-wide text-red-500;
   position: absolute;
   left: 2rem;
   bottom: 0.5rem;
-  color: var(--secondary-300);
-  font-size: 14px;
-  font-style: italic;
 }

@@ -23,7 +23,8 @@ const AppForm = () => {
     handleSubmit,
     reset,
   } = useForm<SchemaType>({
-    mode: 'onSubmit',
+    // mode: 'onSubmit',
+    mode: 'onBlur',
     resolver: zodResolver(schema),
   });
 
@@ -59,7 +60,7 @@ const AppForm = () => {
             Shorten it!
           </button>
           {!!errors.Url && (
-            <div className={classes.error}>{errors.Url.message}</div>
+            <span className={classes.error}>{errors.Url.message}</span>
           )}
         </form>
       </div>

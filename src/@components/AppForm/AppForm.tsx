@@ -4,8 +4,9 @@ import * as z from 'zod';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 
-import { useAppDispatch } from '../../@store/configureStore';
+import { useAppDispatch, useAppSelector } from '../../@store/configureStore';
 import { createShortLinkTC } from '../../@store/link/linkSlice';
+import { linksSelector } from '../../@store/link/selectors';
 
 import classes from './AppForm.module.scss';
 
@@ -17,6 +18,7 @@ type SchemaType = z.infer<typeof schema>;
 
 const AppForm = () => {
   const dispatch = useAppDispatch();
+  const { items: links } = useAppSelector(linksSelector);
   const {
     register,
     formState: { errors },
@@ -29,7 +31,16 @@ const AppForm = () => {
   });
 
   const onSubmit: SubmitHandler<SchemaType> = ({ Url }) => {
-    dispatch(createShortLinkTC(Url));
+    const index = links.findIndex(
+      (link) => link.original_link === `http://'${Url}`,
+    );
+    const isExist = index !== -1;
+    // console.log('Url', Url);
+    // console.log('index :>> ', index);
+    // console.log('isExist', isExist);
+    if (!isExist) {
+      dispatch(createShortLinkTC(Url));
+    }
     reset();
   };
 
@@ -42,14 +53,12 @@ const AppForm = () => {
           onSubmit={handleSubmit(onSubmit)}
         >
           <input
+            {...register('Url')}
             type="url"
             placeholder="Shorten a link here..."
             className={classes.input}
-            {...register('Url')}
             style={{
-              outlineColor: errors.Url
-                ? 'var(--secondary-300)'
-                : 'currentColor',
+              outlineColor: errors.Url ? 'red' : 'currentColor',
               outlineWidth: errors.Url ? '4px' : '1px',
             }}
           />

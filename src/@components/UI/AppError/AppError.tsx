@@ -4,14 +4,14 @@ type Props = {
 };
 
 const AppError = ({ error }: Props) => {
-  let err = '';
+  let errorString = '';
 
   // console.log('typeof error', typeof error);
 
   if (typeof error === 'string') {
-    err = error;
+    errorString = error;
   } else {
-    err = JSON.stringify(error);
+    errorString = JSON.stringify(error);
   }
 
   return (
@@ -20,7 +20,7 @@ const AppError = ({ error }: Props) => {
       role="alert"
     >
       <span className="font-medium">Error&nbsp;:&nbsp;</span>
-      {error}
+      {errorString}
     </div>
   );
 };

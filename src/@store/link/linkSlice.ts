@@ -36,7 +36,7 @@ const linkInitialState = {
   error: '' as string | null | undefined,
 };
 
-export type linkInitialStateType = typeof linkInitialState;
+// export type linkInitialStateType = typeof linkInitialState;
 
 export const linkSlice = createSlice({
   name: 'links',

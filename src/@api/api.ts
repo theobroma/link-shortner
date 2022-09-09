@@ -5,12 +5,12 @@ import type { LinkResponseType } from '../@types';
 
 const API_URL = 'https://api.shrtco.de/v2';
 
-export const instance = axios.create({
+const instance = axios.create({
   baseURL: API_URL,
 });
 
 export const LinkAPI = {
   getShortLink(url: string) {
-    return instance.post<LinkResponseType>(`/shortennn?url='${url}`);
+    return instance.post<LinkResponseType>(`/shorten?url='${url}`);
   },
 };

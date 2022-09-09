@@ -1,11 +1,14 @@
 import { useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 
+import { nanoid } from '@reduxjs/toolkit';
+
 import { useAppSelector } from '../../@store/configureStore';
 import { linksSelector } from '../../@store/link/selectors';
+import AppError from '../UI/AppError/AppError';
+import LoadingPage from '../UI/LoadingPage/LoadingPage';
 
 import classes from './Shortens.module.scss';
-import AppError from '../UI/AppError/AppError';
 
 const Shortens = () => {
   const [copiedLinks, setCopiedLink] = useState<string | null>(null);
@@ -15,7 +18,7 @@ const Shortens = () => {
     isError,
     // isFetching,
     isLoading,
-    isSuccess,
+    // isSuccess,
   } = useAppSelector(linksSelector);
 
   const copyToClipboard = (link: string) => {
@@ -24,17 +27,17 @@ const Shortens = () => {
     });
   };
 
-  if (isLoading) return <div>Processing...</div>;
-
   return (
     <section className={classes.Shortens}>
       <div className="container">
+        {/* loading */}
+        {!!isLoading && <LoadingPage />}
         {/* error */}
         {!!isError && <AppError error={error} />}
         {/* results */}
         {links.length > 0 &&
           links.map((item) => (
-            <AnimatePresence key={item.code}>
+            <AnimatePresence key={nanoid()}>
               <motion.div
                 className={classes.item}
                 data-active={copiedLinks === item.full_short_link2}

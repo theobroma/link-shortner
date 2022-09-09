@@ -19,8 +19,8 @@ const AppError = ({ error }: Props) => {
       className="mb-4 rounded-lg bg-red-100 p-4 text-sm text-red-700 dark:bg-red-200 dark:text-red-800"
       role="alert"
     >
-      <span className="font-medium">Danger alert!</span> Change a few things up
-      and try submitting again.
+      <span className="font-medium">Error&nbsp;:&nbsp;</span>
+      {error}
     </div>
   );
 };

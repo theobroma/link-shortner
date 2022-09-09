@@ -11,6 +11,6 @@ export const instance = axios.create({
 
 export const LinkAPI = {
   getShortLink(url: string) {
-    return instance.post<LinkResponseType>(`/shortennnn?url='${url}`);
+    return instance.post<LinkResponseType>(`/shortennn?url='${url}`);
   },
 };

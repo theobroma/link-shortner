@@ -5,26 +5,27 @@ import type { LinkResponseType, LinkResultType } from '../../@types';
 import { LinkResponseSchema } from '../../@types';
 import { waitForMe } from '../../@utils/waitforme';
 
-export const createShortLinkTC = createAsyncThunk<LinkResponseType, string>(
-  'links/createShortLink',
-  async (url, thunkAPI) => {
+export const createShortLinkTC = createAsyncThunk<
+  LinkResponseType,
+  string,
+  { rejectValue: any }
+>('links/createShortLink', async (url, thunkAPI) => {
+  try {
+    await waitForMe(1000);
+    const res = await LinkAPI.getShortLink(url);
+
+    // ZOD validation
     try {
-      await waitForMe(3000);
-      const res = await LinkAPI.getShortLink(url);
-
-      // ZOD validation
-      try {
-        LinkResponseSchema.parse(res.data);
-      } catch (error) {
-        console.log(error);
-      }
-
-      return res.data;
-    } catch (err: any) {
-      return thunkAPI.rejectWithValue(err.response.data);
+      LinkResponseSchema.parse(res.data);
+    } catch (error) {
+      console.log(error);
     }
-  },
-);
+
+    return res.data;
+  } catch (err: any) {
+    return thunkAPI.rejectWithValue(err.response.data);
+  }
+});
 
 const linkInitialState = {
   items: [] as LinkResultType[],
@@ -32,7 +33,7 @@ const linkInitialState = {
   isLoading: false,
   isSuccess: false,
   isError: false,
-  error: '' as string | null,
+  error: '' as string | null | undefined,
 };
 
 export type linkInitialStateType = typeof linkInitialState;
@@ -57,15 +58,16 @@ export const linkSlice = createSlice({
           state.isSuccess = true;
         } else {
           state.isError = true;
+          state.error = action.payload.error;
         }
         state.isLoading = false;
       })
       .addCase(createShortLinkTC.rejected, (state, action) => {
+        if (action.payload.ok === false) {
+          state.error = action.payload.error;
+        }
         state.isLoading = false;
         state.isError = true;
-        if (action.payload instanceof Error) {
-          state.error = action.payload.message;
-        }
       });
   },
 });

@@ -17,6 +17,7 @@ export type LinkResultType = z.infer<typeof LinkResultSchema>;
 
 export const LinkResponseSchema = z.object({
   ok: z.boolean(),
+  error: z.string().optional(),
   result: LinkResultSchema,
 });
 

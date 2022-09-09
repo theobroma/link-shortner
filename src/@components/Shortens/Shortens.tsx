@@ -5,6 +5,7 @@ import { useAppSelector } from '../../@store/configureStore';
 import { linksSelector } from '../../@store/link/selectors';
 
 import classes from './Shortens.module.scss';
+import AppError from '../UI/AppError/AppError';
 
 const Shortens = () => {
   const [copiedLinks, setCopiedLink] = useState<string | null>(null);
@@ -23,32 +24,35 @@ const Shortens = () => {
     });
   };
 
-  if (!links.length) return null;
   if (isLoading) return <div>Processing...</div>;
 
   return (
     <section className={classes.Shortens}>
       <div className="container">
-        {links.map((item) => (
-          <AnimatePresence key={item.code}>
-            <motion.div
-              className={classes.item}
-              data-active={copiedLinks === item.full_short_link2}
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
-            >
-              <span>{item.original_link}</span>
-              <span>{item.full_short_link2}</span>
-              <button
-                type="submit"
-                className="inline-block rounded bg-yellow-500 py-2 px-5 text-sm text-yellow-800 shadow"
-                onClick={() => copyToClipboard(item.full_short_link2)}
+        {/* error */}
+        {!!isError && <AppError error={error} />}
+        {/* results */}
+        {links.length > 0 &&
+          links.map((item) => (
+            <AnimatePresence key={item.code}>
+              <motion.div
+                className={classes.item}
+                data-active={copiedLinks === item.full_short_link2}
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
               >
-                {copiedLinks === item.full_short_link2 ? 'Copied!' : 'Copy'}
-              </button>
-            </motion.div>
-          </AnimatePresence>
-        ))}
+                <span>{item.original_link}</span>
+                <span>{item.full_short_link2}</span>
+                <button
+                  type="submit"
+                  className="inline-block rounded bg-yellow-500 py-2 px-5 text-sm text-yellow-800 shadow"
+                  onClick={() => copyToClipboard(item.full_short_link2)}
+                >
+                  {copiedLinks === item.full_short_link2 ? 'Copied!' : 'Copy'}
+                </button>
+              </motion.div>
+            </AnimatePresence>
+          ))}
       </div>
     </section>
   );

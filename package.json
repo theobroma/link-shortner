@@ -5,6 +5,7 @@
   "license": "ISC",
   "dependencies": {
     "@fontsource/roboto": "^4.5.8",
+    "@hookform/resolvers": "^2.9.7",
     "@reduxjs/toolkit": "^1.8.5",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",

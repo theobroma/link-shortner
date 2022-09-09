@@ -1,30 +1,33 @@
 import type { SubmitHandler } from 'react-hook-form';
 import { useForm } from 'react-hook-form';
+import * as z from 'zod';
+
+import { zodResolver } from '@hookform/resolvers/zod';
 
 import { useAppDispatch } from '../../@store/configureStore';
 import { createShortLinkTC } from '../../@store/link/linkSlice';
 
-// import { Button } from 'components/Button';
-// import { createShortLink, selectLoading } from 'store/slice/linkSlice';
 import classes from './AppForm.module.scss';
 
-type Inputs = {
-  Url: string;
-};
+const schema = z.object({
+  Url: z.string().url({ message: 'Invalid url' }),
+});
+
+type SchemaType = z.infer<typeof schema>;
 
 const AppForm = () => {
-  // const loading = useSelector(selectLoading);
   const dispatch = useAppDispatch();
   const {
     register,
     formState: { errors },
     handleSubmit,
     reset,
-  } = useForm<Inputs>({
+  } = useForm<SchemaType>({
     mode: 'onSubmit',
+    resolver: zodResolver(schema),
   });
 
-  const onSubmit: SubmitHandler<Inputs> = ({ Url }) => {
+  const onSubmit: SubmitHandler<SchemaType> = ({ Url }) => {
     dispatch(createShortLinkTC(Url));
     reset();
   };
@@ -41,21 +44,13 @@ const AppForm = () => {
             type="url"
             placeholder="Shorten a link here..."
             className={classes.input}
-            {...register('Url', {
-              required: 'Please add a link',
-              pattern: {
-                value:
-                  /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)/g,
-                message: 'Please enter a valid url',
-              },
-            })}
+            {...register('Url')}
             style={{
               outlineColor: errors.Url
                 ? 'var(--secondary-300)'
                 : 'currentColor',
               outlineWidth: errors.Url ? '4px' : '1px',
             }}
-            // disabled={loading === 'loading'}
           />
           <button
             type="submit"
@@ -63,14 +58,6 @@ const AppForm = () => {
           >
             Shorten it!
           </button>
-          {/* <Button
-            variant="square"
-            type="submit"
-            size="medium"
-            disabled={loading === 'loading'}
-          >
-            Shorten it!
-          </Button> */}
           {!!errors.Url && (
             <div className={classes.error}>{errors.Url.message}</div>
           )}
